@@ -33,7 +33,7 @@ class DatePicker extends Component {
       modalVisible: false,
       animatedHeight: new Animated.Value(0),
       allowPointerEvents: true,
-      isPicker: false
+      showPicker: false
     };
 
     this.getDate = this.getDate.bind(this);
@@ -222,7 +222,7 @@ class DatePicker extends Component {
   onDatetimePicked({action, year, month, day}) {
     if (action !== DatePickerAndroid.dismissedAction) {
       this.setState({
-        isPicker: true,
+        showPicker: true,
         date: new Date(year, month, day)
       });
     } else {
@@ -232,11 +232,11 @@ class DatePicker extends Component {
 
   onDatetimeTimePicked = (event, time) => {
     if (time === undefined) {
-      this.setState({ isPicker: false });
+      this.setState({ showPicker: false });
     } else {
       this.setState({
         date: Moment(time),
-        isPicker: false
+        showPicker: false
       });
       this.datePicked();
     }
@@ -429,7 +429,15 @@ class DatePicker extends Component {
               </TouchableComponent>
             </View>
           </Modal>}
-          {(Platform.OS === 'android' && this.state.isPicker) ?<DateTimePicker minuteInterval={5} mode="time" value={this.state.date} onChange={this.onDatetimeTimePicked} display={androidMode} /> : null}
+          {(Platform.OS === 'android' && this.state.showPicker) &&
+            <DateTimePicker
+              minuteInterval={5}
+              mode="time"
+              value={this.state.date}
+              onChange={this.onDatetimeTimePicked}
+              display={androidMode}
+            />
+          }
         </View>
       </TouchableComponent>
     );
